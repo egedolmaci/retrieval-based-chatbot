@@ -17,7 +17,7 @@ class ChatBot:
         return True
 
   def chat(self):
-    user_message = input('Hey! What would you like to know about our menu?\n')
+    user_message = input('Hey! What would you like to know about mental health?\n> ')
     while not self.make_exit(user_message):
       user_message = self.respond(user_message)
 
@@ -31,8 +31,9 @@ class ChatBot:
     
   def respond(self, user_message):
     best_response = self.find_intent_match(user_message)
-    print(best_response)
-    input_message = input("Do you have any other questions? ")           
+    response_to_use = self.df.at[best_response, 'Answers']
+    print(response_to_use)
+    input_message = input("> ")           
     return input_message
 
 ege = ChatBot()
