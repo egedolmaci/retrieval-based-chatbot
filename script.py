@@ -1,5 +1,5 @@
 from collections import Counter
-from helpful_fucntions import preprocess, compare_overlap
+from helpful_functions import preprocess, compare_overlap, check_sentence
 import pandas as pd
 from nltk.tokenize import word_tokenize
 
@@ -9,6 +9,7 @@ class ChatBot:
 
   df = pd.read_csv('Mental_Health_FAQ.csv')  
   df['Clean'] = df['Questions'].apply(word_tokenize)
+  flag = True
 
   def make_exit(self, user_message):
     for command in exit_commands:
@@ -17,9 +18,14 @@ class ChatBot:
         return True
 
   def chat(self):
-    user_message = input('Hey! What would you like to know about mental health?\n> ')
-    while not self.make_exit(user_message):
-      user_message = self.respond(user_message)
+      user_message = input('Hey! What would you like to know about mental health?\n> ')
+      while not self.make_exit(user_message):
+        if check_sentence(user_message):
+          user_message = self.respond(user_message)
+        else:
+          print('Sorry, I did not understand.')
+          self.chat()
+        
 
   def find_intent_match(self, user_message):
       bow_user_message = Counter(preprocess(user_message))
